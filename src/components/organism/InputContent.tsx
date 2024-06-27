@@ -1,13 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import {
+  type AwaitedReactNode,
+  type JSXElementConstructor,
+  type ReactElement,
+  type ReactNode,
+  type ReactPortal,
+  type SetStateAction,
+  useState,
+} from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
 
-export default function InputContent() {
+export default function InputContent(props: {
+  locale: {
+    error: SetStateAction<string>;
+    placeholder: string | undefined;
+    submit:
+      | string
+      | number
+      | bigint
+      | boolean
+      | ReactElement<any, string | JSXElementConstructor<any>>
+      | Iterable<ReactNode>
+      | ReactPortal
+      | Promise<AwaitedReactNode>
+      | null
+      | undefined;
+  };
+}) {
   const [errorSearch, setErrorSearch] = useState('');
   const [search, setSearch] = useState('');
   const { toast } = useToast();
@@ -15,10 +39,10 @@ export default function InputContent() {
   const handleChange = (value: string) => {
     const isVimeo = value.slice(0, 18) === 'https://vimeo.com/';
     const isDailyMotion = value.slice(0, 27) === 'https://www.dailymotion.com';
-    if (!isVimeo && !isDailyMotion) {
-      setErrorSearch(
-        'Invalid! url must be start with https://vimeo.com/ or https://www.dailymotion.com',
-      );
+    if (value === '') {
+      setErrorSearch('');
+    } else if (!isVimeo && !isDailyMotion) {
+      setErrorSearch(props.locale.error);
     } else {
       setErrorSearch('');
     }
@@ -29,7 +53,7 @@ export default function InputContent() {
     <>
       <div className="flex items-center justify-center sm:w-[90%] md:w-[33%]">
         <Input
-          placeholder="Enter url"
+          placeholder={props.locale.placeholder}
           className="border-none bg-white outline-none"
           onChange={(e) => handleChange(e.target.value)}
         />
@@ -42,7 +66,7 @@ export default function InputContent() {
             });
           }}
         >
-          Submit
+          {props.locale.submit}
         </Button>
       </div>
       <small className=" text-center italic text-red-600">{errorSearch}</small>

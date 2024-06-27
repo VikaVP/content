@@ -18,7 +18,11 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-export default async function IndexPage() {
+export default async function IndexPage(props: { params: { locale: string } }) {
+  const t = await getTranslations({
+    locale: props.params.locale,
+    namespace: 'Content',
+  });
   const tags = [
     'Design',
     'Development',
@@ -31,13 +35,18 @@ export default async function IndexPage() {
     <>
       <div className="flex h-80 w-full flex-col items-center justify-center bg-black py-8">
         <h1 className="text-center text-[26px] font-bold text-white md:text-[50px]">
-          Discover the best Content
+          {t('title')}
         </h1>
         <h5 className="my-2 text-center text-[12px] text-[#7d7d7d] md:text-[16px]">
-          Explore a curated collection of the latest and greatest articles,
-          tutorials, and more.
+          {t('description')}
         </h5>
-        <InputContent />
+        <InputContent
+          locale={{
+            submit: t('submit'),
+            error: t('error_search'),
+            placeholder: t('placeholder'),
+          }}
+        />
       </div>
       <div className="mt-4 flex w-full flex-col p-8">
         <div className="flex flex-col gap-2 md:flex-row">
