@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/VikaVP/content/compare/v1.0.0...v1.1.0) (2024-06-27)
+
+
+### Features
+
+* fetch api data and image ([cf84d26](https://github.com/VikaVP/content/commit/cf84d26434d6aa1e4fd2ba269accceb14084ee04))
+
 # 1.0.0 (2024-06-27)
 
 
