@@ -1,20 +1,31 @@
 /* eslint-disable react/no-array-index-key */
 
+'use client';
+
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
-import { Badge } from '../ui/badge';
 import { Card, CardContent } from '../ui/card';
+import Tags from './Tags';
 
-const getData = async () => {
+const getData = async (keyword: string) => {
   const res = await fetch(
-    'https://api.dailymotion.com/videos?search=web+development&limit=9',
+    `https://api.dailymotion.com/videos?search=${keyword}&limit=9`,
   );
   return res.json();
 };
 
-export default async function Contents() {
-  const datas = await getData();
+export default function Contents({ keyword }: { keyword: string }) {
+  const [datas, setDatas] = useState<any>({});
 
+  const fetchDatas = async (text: string) => {
+    const fetch = await getData(text);
+    setDatas(fetch);
+  };
+
+  useEffect(() => {
+    fetchDatas(keyword || 'Computer');
+  }, [keyword]);
   return (
     <div className="mt-4 grid gap-3 sm:grid-cols-1 md:grid-cols-3">
       {datas?.list?.map((data: ContentLists, ind: number) => {
@@ -59,20 +70,7 @@ export default async function Contents() {
                 {new Array(Math.floor(Math.random() * 4) + 2)
                   .fill(1)
                   .map((i: number) => (
-                    <Badge
-                      variant="secondary"
-                      className=" mr-2 w-max pr-4 text-[#808080]"
-                      key={i}
-                    >
-                      <Image
-                        src="/assets/images/tag.svg"
-                        alt="Clerk"
-                        width="18"
-                        height="20"
-                        className="mr-2"
-                      />
-                      {data.channel}
-                    </Badge>
+                    <Tags name={data.channel} key={i} click={() => false} />
                   ))}
               </div>
             </CardContent>

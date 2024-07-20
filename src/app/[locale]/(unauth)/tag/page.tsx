@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import { getTranslations } from 'next-intl/server';
 
-import Content from '@/components/organism/Content';
+import InputContent from '@/components/organism/InputContent';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
@@ -22,14 +22,20 @@ export default async function IndexPage(props: { params: { locale: string } }) {
   });
 
   return (
-    <Content
-      t={{
-        title: t('title'),
-        description: t('description'),
-        submit: t('submit'),
-        error: t('error_search'),
-        placeholder: t('placeholder'),
-      }}
-    />
+    <div className="flex h-80 w-full flex-col items-center justify-center bg-black py-8">
+      <h1 className="text-center text-[26px] font-bold text-white md:text-[50px]">
+        {t('title')}
+      </h1>
+      <h5 className="my-2 text-center text-[12px] text-[#7d7d7d] md:text-[16px]">
+        {t('description')}
+      </h5>
+      <InputContent
+        locale={{
+          submit: t('submit'),
+          error: t('error_search'),
+          placeholder: t('placeholder'),
+        }}
+      />
+    </div>
   );
 }
